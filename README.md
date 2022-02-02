@@ -2,6 +2,14 @@
 
 A simple Flutter To-Do list application, built using Firebase as a BaaS.
 
+## Features
+
+- Realtime representation of your current tasks
+- Filtering by all, done and pending
+- Simple and modern task creation form
+- Easily mark a task as done by swiping it
+- Delete any of the tasks in a single click
+
 ## Technology
 
 - **Flutter**
