@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/domain/models/task.dart';
-import 'package:flutter_todo/presentation/widgets/task_list.dart';
+import 'package:flutter_todo/models/task.dart';
+import 'package:flutter_todo/widgets/task_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
