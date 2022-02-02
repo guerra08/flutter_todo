@@ -3,6 +3,7 @@ import 'package:flutter_todo/locator/locator.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/service/task_service.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -31,7 +32,8 @@ class _MyHomePageState extends State<HomePage> {
               return const Text('Something went wrong');
             }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (!snapshot.hasData ||
+                snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             }
 
@@ -44,13 +46,7 @@ class _MyHomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          getIt.get<TaskService>().addNewTask(
-                Task(
-                  title: "New task",
-                  description: "Lorem ipsum",
-                  isDone: false,
-                ),
-              );
+          GoRouter.of(context).go("/create");
         },
         child: const Icon(Icons.add),
       ),
