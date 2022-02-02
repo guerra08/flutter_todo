@@ -23,7 +23,7 @@ class _MyHomePageState extends State<HomePage> {
       ),
       body: Center(
         child: StreamBuilder(
-          stream: getIt.get<TaskService>().getNotDoneTasksAsStream(),
+          stream: locator.get<TaskService>().getNotDoneTasksAsStream(),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<Task>> snapshot,
@@ -37,9 +37,21 @@ class _MyHomePageState extends State<HomePage> {
               return const CircularProgressIndicator();
             }
 
+            if (snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text(
+                  "All done! Feel free to add a new task!",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            }
+
             return TaskList(
               tasks: snapshot.data!,
-              onDismiss: getIt.get<TaskService>().markTaskAsDone,
+              onDismiss: locator.get<TaskService>().markTaskAsDone,
             );
           },
         ),
