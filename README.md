@@ -1,16 +1,20 @@
 # flutter_todo
 
-A new Flutter project.
+A simple Flutter To-Do list application, built using Firebase as a BaaS.
 
-## Getting Started
+## Technology
 
-This project is a starting point for a Flutter application.
+- **Flutter**
+- **get_it** for service locator patterns
+- **go_router** for application navigation 
+- **Firebase** as a backend-as-a-service
+- **FlutterFire** for Firebase Flutter plugins
 
-A few resources to get you started if this is your first Flutter project:
+## Architecture
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **locator**: service locator
+- **models**: domain models for Firestore interaction
+- **pages**: application UI pages
+- **service**: service layer, to abstract and encapsulate Firestore calls (enables switch to another backend in the future)
+- **utils**: general utils 
+- **widgets**: reusable / encapsulated widgets
