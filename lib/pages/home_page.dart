@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/locator/locator.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/service/task_service.dart';
+import 'package:flutter_todo/utils/task_filter.dart';
+import 'package:flutter_todo/widgets/filter_task_popup.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,15 +17,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  TaskFilter _selectedFilter = TaskFilter.notDone;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          FilterTaskPopup(
+            onOptionSelected: (TaskFilter option) {
+              setState(() {
+                _selectedFilter = option;
+              });
+            },
+          ),
+        ],
       ),
       body: Center(
         child: StreamBuilder(
-          stream: locator.get<TaskService>().getNotDoneTasksAsStream(),
+          stream: locator
+              .get<TaskService>()
+              .getTasksAsStream(filter: _selectedFilter),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<Task>> snapshot,
