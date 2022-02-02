@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/domain/models/task.dart';
-import 'package:flutter_todo/presentation/widgets/task_tile.dart';
+import 'package:flutter_todo/presentation/widgets/task_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -49,24 +49,13 @@ class _MyHomePageState extends State<HomePage> {
               return const CircularProgressIndicator();
             }
 
-            return ListView(
-                children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Task task =
-                  Task.fromMap(document.data()! as Map<String, dynamic>);
-              return Dismissible(
-                key: Key(document.id),
-                onDismissed: (direction) {
-                  markAsDone(document.id);
-                },
-                background: Container(
-                  color: Colors.green[400],
-                ),
-                child: TaskTile(
-                  title: task.title,
-                  description: task.description,
-                ),
-              );
-            }).toList());
+            List<Task> tasks = snapshot.data!.docs.map((DocumentSnapshot doc) {
+              Task t = Task.fromMap(doc.data()! as Map<String, dynamic>);
+              t.uid = doc.id;
+              return t;
+            }).toList();
+
+            return TaskList(tasks: tasks, onDismiss: markAsDone);
           },
         ),
       ),
