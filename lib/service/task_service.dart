@@ -19,8 +19,10 @@ class TaskService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map(
-              (doc) =>
-                  Task.fromMap(doc.data()! as Map<String, dynamic>, id: doc.id),
+              (doc) => Task.fromMap(
+                doc.data()! as Map<String, dynamic>,
+                id: doc.id,
+              ),
             )
             .toList());
   }
