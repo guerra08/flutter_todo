@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/models/get_it_setup.dart';
+import 'package:flutter_todo/locator/locator.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/service/task_service.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
