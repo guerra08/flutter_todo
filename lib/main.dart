@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         routes: [
           GoRoute(
             path: "create",
-            builder: (context, state) => CreatePage(),
+            builder: (context, state) => const CreatePage(),
           ),
         ],
       ),
