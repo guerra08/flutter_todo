@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/models/get_it_setup.dart';
 import 'package:flutter_todo/models/task.dart';
+import 'package:flutter_todo/service/task_service.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,23 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  final CollectionReference<Map<String, dynamic>> _tasksRef =
-      FirebaseFirestore.instance.collection('tasks');
-
-  Future<void> markAsDone(String uid) {
-    return _tasksRef.doc(uid).update({'isDone': true});
-  }
-
-  Future<void> addNewTask() {
-    Task toAdd = Task(
-      title: "Hey, Johnny Park!",
-      description: "A Song",
-      isDone: false,
-    );
-
-    return _tasksRef.add(toAdd.toMap());
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +23,7 @@ class _MyHomePageState extends State<HomePage> {
       ),
       body: Center(
         child: StreamBuilder<QuerySnapshot>(
-          stream: _tasksRef.where("isDone", isEqualTo: false).snapshots(),
+          stream: getIt.get<TaskService>().getNotDoneTasksAsStream(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -55,13 +40,19 @@ class _MyHomePageState extends State<HomePage> {
               return t;
             }).toList();
 
-            return TaskList(tasks: tasks, onDismiss: markAsDone);
+            return TaskList(
+                tasks: tasks,
+                onDismiss: getIt.get<TaskService>().markTaskAsDone);
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addNewTask();
+          getIt.get<TaskService>().addNewTask(Task(
+                title: "New task",
+                description: "Lorem ipsum",
+                isDone: false,
+              ));
         },
         child: const Icon(Icons.add),
       ),
