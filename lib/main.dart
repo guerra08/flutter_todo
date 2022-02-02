@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/domain/models/task.dart';
 import 'package:flutter_todo/presentation/widgets/task_tile.dart';
 
 Future<void> main() async {
@@ -49,20 +50,20 @@ class _MyHomePageState extends State<MyHomePage> {
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return Text('Something went wrong');
+              return const Text('Something went wrong');
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading");
+              return const CircularProgressIndicator();
             }
 
             return ListView(
                 children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data()! as Map<String, dynamic>;
+              Task task =
+                  Task.fromMap(document.data()! as Map<String, dynamic>);
               return TaskTile(
-                title: data['title'],
-                description: data['description'],
+                title: task.title,
+                description: task.description,
               );
             }).toList());
           },
