@@ -38,7 +38,7 @@ class _CreatePageState extends State<CreatePage> {
               },
             ),
             TextFormField(
-              onFieldSubmitted: (value) {
+              onSaved: (value) {
                 _description = value;
               },
             ),
