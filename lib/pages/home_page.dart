@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/models/get_it_setup.dart';
 import 'package:flutter_todo/models/task.dart';
@@ -22,10 +21,12 @@ class _MyHomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: StreamBuilder<QuerySnapshot>(
+        child: StreamBuilder(
           stream: getIt.get<TaskService>().getNotDoneTasksAsStream(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List<Task>> snapshot,
+          ) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');
             }
@@ -34,25 +35,22 @@ class _MyHomePageState extends State<HomePage> {
               return const CircularProgressIndicator();
             }
 
-            List<Task> tasks = snapshot.data!.docs.map((DocumentSnapshot doc) {
-              Task t = Task.fromMap(doc.data()! as Map<String, dynamic>);
-              t.uid = doc.id;
-              return t;
-            }).toList();
-
             return TaskList(
-                tasks: tasks,
-                onDismiss: getIt.get<TaskService>().markTaskAsDone);
+              tasks: snapshot.data!,
+              onDismiss: getIt.get<TaskService>().markTaskAsDone,
+            );
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          getIt.get<TaskService>().addNewTask(Task(
-                title: "New task",
-                description: "Lorem ipsum",
-                isDone: false,
-              ));
+          getIt.get<TaskService>().addNewTask(
+                Task(
+                  title: "New task",
+                  description: "Lorem ipsum",
+                  isDone: false,
+                ),
+              );
         },
         child: const Icon(Icons.add),
       ),

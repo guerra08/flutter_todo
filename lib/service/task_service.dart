@@ -13,7 +13,15 @@ class TaskService {
     return _tasksRef.doc(uid).update({'isDone': true});
   }
 
-  Stream<QuerySnapshot> getNotDoneTasksAsStream() {
-    return _tasksRef.where("isDone", isEqualTo: false).snapshots();
+  Stream<List<Task>> getNotDoneTasksAsStream() {
+    return _tasksRef
+        .where("isDone", isEqualTo: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map(
+              (doc) =>
+                  Task.fromMap(doc.data()! as Map<String, dynamic>, id: doc.id),
+            )
+            .toList());
   }
 }
