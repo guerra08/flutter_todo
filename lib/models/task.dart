@@ -12,13 +12,12 @@ class Task {
   });
 
   Map<String, dynamic> toMap({bool withUid = false}) {
-    final map = {
-      'uid': uid,
+    var map = {
       'title': title,
       'description': description,
       'isDone': isDone,
     };
-    if (withUid) map['uid'] = uid;
+    if (withUid) map['uid'] = uid ?? '';
     return map;
   }
 

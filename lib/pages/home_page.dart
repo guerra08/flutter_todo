@@ -55,7 +55,7 @@ class _MyHomePageState extends State<HomePage> {
             if (snapshot.data!.isEmpty) {
               return const Center(
                 child: Text(
-                  "All done! Feel free to add a new task!",
+                  "This feels a little empty... Feel free to add a new task!",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -67,6 +67,7 @@ class _MyHomePageState extends State<HomePage> {
             return TaskList(
               tasks: snapshot.data!,
               onDismiss: locator.get<TaskService>().markTaskAsDone,
+              onDeletePressed: locator.get<TaskService>().deleteTask,
             );
           },
         ),

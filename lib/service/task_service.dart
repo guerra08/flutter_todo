@@ -31,6 +31,10 @@ class TaskService {
     return _tasksRef.snapshots().map(_mapSnapshotToListOfTasks);
   }
 
+  Future<void> deleteTask(String uid) {
+    return _tasksRef.doc(uid).delete();
+  }
+
   List<Task> _mapSnapshotToListOfTasks(QuerySnapshot snapshot) {
     return snapshot.docs
         .map(
