@@ -11,7 +11,7 @@ class AuthGate extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _auth = ref.watch(authServiceProvider);
 
-    if (_auth.isLoggedIn) {
+    if (_auth.authUser != null) {
       return const HomePage(title: "To Do");
     }
     return const SignInPage();

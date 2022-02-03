@@ -3,23 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService extends ChangeNotifier {
-  bool _isLoggedIn = false;
+  User? _authUser;
   bool _isLoading = false;
 
   AuthService() {
     FirebaseAuth.instance.authStateChanges().listen(
       (user) {
-        if (user == null) {
-          _isLoggedIn = false;
-        } else {
-          _isLoggedIn = true;
-        }
+        _authUser = user;
         notifyListeners();
       },
     );
   }
 
-  bool get isLoggedIn => _isLoggedIn;
+  User? get authUser => _authUser;
   bool get isLoading => _isLoading;
 
   Future<UserCredential> signInWithGoogle() async {

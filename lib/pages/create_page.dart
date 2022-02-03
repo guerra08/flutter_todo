@@ -17,7 +17,7 @@ class _CreatePageState extends ConsumerState<CreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _tasksService = ref.watch(tasksProvider);
+    final _tasksService = ref.watch(tasksServiceProvider)!;
 
     return Scaffold(
       appBar: AppBar(

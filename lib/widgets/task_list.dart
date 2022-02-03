@@ -14,7 +14,7 @@ class TaskList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(tasksProvider);
+    final provider = ref.watch(tasksServiceProvider)!;
 
     return ListView(
         children: tasks.map((Task task) {

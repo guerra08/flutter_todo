@@ -11,9 +11,6 @@ class SignInPage extends ConsumerWidget {
     final _authService = ref.watch(authServiceProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign In"),
-      ),
       body: Center(
         child: !_authService.isLoading
             ? TextButton.icon(

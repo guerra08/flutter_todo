@@ -23,7 +23,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final _authService = ref.read(authServiceProvider);
-    final _tasksService = ref.read(tasksProvider);
+    final _tasksService = ref.read(tasksServiceProvider)!;
 
     return Scaffold(
       appBar: AppBar(

@@ -2,6 +2,8 @@
 
 A simple Flutter To-Do list application, built using Firebase as a BaaS.
 
+![Peek 02-02-2022 18-26](https://user-images.githubusercontent.com/29544679/152240130-0404e89b-815f-4464-9cb6-e1036bb5e741.gif)
+
 ## Features
 
 - Realtime representation of your current tasks
