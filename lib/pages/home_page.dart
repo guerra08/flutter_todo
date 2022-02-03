@@ -67,11 +67,7 @@ class HomePage extends ConsumerWidget {
                         );
                       }
 
-                      return TaskList(
-                        tasks: snapshot.data!,
-                        onDismiss: tasks.markTaskAsDone,
-                        onDeletePressed: tasks.deleteTask,
-                      );
+                      return TaskList(tasks: snapshot.data!);
                     },
                   ),
           ),
