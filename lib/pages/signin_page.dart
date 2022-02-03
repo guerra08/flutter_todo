@@ -8,20 +8,22 @@ class SignInPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _authService = ref.read(authServiceProvider);
+    final _authService = ref.watch(authServiceProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sign In"),
       ),
       body: Center(
-        child: TextButton.icon(
-          onPressed: () async {
-            await _authService.signInWithGoogle();
-          },
-          icon: const FaIcon(FontAwesomeIcons.google),
-          label: const Text("Sign in with Google"),
-        ),
+        child: !_authService.isLoading
+            ? TextButton.icon(
+                onPressed: () async {
+                  await _authService.signInWithGoogle();
+                },
+                icon: const FaIcon(FontAwesomeIcons.google),
+                label: const Text("Sign in with Google"),
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }
