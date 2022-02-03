@@ -29,13 +29,18 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          FilterTaskPopup(
-            onOptionSelected: (TaskFilter option) {
-              setState(() {
-                _selectedFilter = option;
-              });
-            },
-          ),
+          Row(
+            children: [
+              Text(_selectedFilter.label),
+              FilterTaskPopup(
+                onOptionSelected: (TaskFilter option) {
+                  setState(() {
+                    _selectedFilter = option;
+                  });
+                },
+              ),
+            ],
+          )
         ],
         leading: IconButton(
           icon: const Icon(Icons.logout),
