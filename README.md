@@ -15,16 +15,16 @@ A simple Flutter To-Do list application, built using Firebase as a BaaS.
 ## Technology
 
 - **Flutter**
-- **get_it** for service locator patterns
+- **Riverpod** for provider pattern
 - **go_router** for application navigation 
 - **Firebase** as a backend-as-a-service
 - **FlutterFire** for Firebase Flutter plugins
 
 ## Architecture
 
-- **locator**: service locator
-- **models**: domain models for Firestore interaction
-- **pages**: application UI pages
-- **service**: service layer, to abstract and encapsulate Firestore calls (enables switch to another backend in the future)
-- **utils**: general utils 
-- **widgets**: reusable / encapsulated widgets
+- **providers**: Riverpod providers
+- **models**: Domain models for Firestore interaction
+- **pages**: Application UI pages
+- **service**: Service layer, to abstract and encapsulate Firebase calls (enables switch to another backend in the future)
+- **utils**: General utils 
+- **widgets**: Reusable / encapsulated widgets
