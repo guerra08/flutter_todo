@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_todo/pages/auth_gate.dart';
 import 'package:flutter_todo/pages/create_page.dart';
-import 'package:flutter_todo/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 Future<void> main() async {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     routes: [
       GoRoute(
         path: "/",
-        builder: (context, state) => const HomePage(title: "To Do"),
+        builder: (context, state) => const AuthGate(),
         routes: [
           GoRoute(
             path: "create",
