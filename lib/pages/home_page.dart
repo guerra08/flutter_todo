@@ -1,44 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/locator/locator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_todo/models/task.dart';
-import 'package:flutter_todo/service/task_service.dart';
+import 'package:flutter_todo/providers/auth.dart';
+import 'package:flutter_todo/providers/tasks.dart';
 import 'package:flutter_todo/utils/task_filter.dart';
 import 'package:flutter_todo/widgets/filter_task_popup.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<HomePage> createState() => _MyHomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<HomePage> {
-  TaskFilter _selectedFilter = TaskFilter.notDone;
+class _HomePageState extends ConsumerState<HomePage> {
+  var _selectedFilter = TaskFilter.notDone;
 
   @override
   Widget build(BuildContext context) {
+    final _authService = ref.read(authServiceProvider);
+    final _tasksService = ref.read(tasksProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          FilterTaskPopup(
-            onOptionSelected: (TaskFilter option) {
-              setState(() {
-                _selectedFilter = option;
-              });
-            },
-          ),
+          Row(
+            children: [
+              Text(_selectedFilter.label),
+              FilterTaskPopup(
+                onOptionSelected: (TaskFilter option) {
+                  setState(() {
+                    _selectedFilter = option;
+                  });
+                },
+              ),
+            ],
+          )
         ],
+        leading: IconButton(
+          icon: const Icon(Icons.logout),
+          onPressed: () async {
+            await _authService.signOut();
+          },
+        ),
       ),
       body: Center(
         child: StreamBuilder(
-          stream: locator
-              .get<TaskService>()
-              .getTasksAsStream(filter: _selectedFilter),
+          stream: _tasksService.getTasksAsStream(filter: _selectedFilter),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<Task>> snapshot,
@@ -64,11 +77,7 @@ class _MyHomePageState extends State<HomePage> {
               );
             }
 
-            return TaskList(
-              tasks: snapshot.data!,
-              onDismiss: locator.get<TaskService>().markTaskAsDone,
-              onDeletePressed: locator.get<TaskService>().deleteTask,
-            );
+            return TaskList(tasks: snapshot.data!);
           },
         ),
       ),
