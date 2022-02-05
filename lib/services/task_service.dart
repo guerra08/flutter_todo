@@ -17,7 +17,7 @@ class TaskService {
     Task t,
   ) async {
     return await _ref.add(
-      t.toMap(),
+      t.toJson(),
     );
   }
 
@@ -51,13 +51,11 @@ class TaskService {
   }
 
   List<Task> _mapSnapshotToListOfTasks(QuerySnapshot snapshot) {
-    return snapshot.docs
-        .map(
-          (doc) => Task.fromMap(
-            doc.data()! as Map<String, dynamic>,
-            id: doc.id,
-          ),
-        )
-        .toList();
+    return snapshot.docs.map((doc) {
+      Task t = Task.fromJson(
+        doc.data()! as Map<String, dynamic>,
+      );
+      return t.copyWith(uid: doc.id);
+    }).toList();
   }
 }

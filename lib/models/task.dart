@@ -1,37 +1,16 @@
-class Task {
-  String? uid;
-  String title;
-  String description;
-  bool isDone;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Task({
-    this.uid,
-    required this.title,
-    required this.description,
-    required this.isDone,
-  });
+part 'task.freezed.dart';
+part 'task.g.dart';
 
-  Map<String, dynamic> toMap({bool withUid = false}) {
-    var map = {
-      'title': title,
-      'description': description,
-      'isDone': isDone,
-    };
-    if (withUid) map['uid'] = uid ?? '';
-    return map;
-  }
+@freezed
+abstract class Task with _$Task {
+  factory Task({
+    String? uid,
+    required String title,
+    required String description,
+    required bool isDone,
+  }) = _Task;
 
-  factory Task.fromMap(Map<String, dynamic> map, {required String id}) {
-    return Task(
-      uid: id,
-      title: map['title'] ?? '',
-      description: map['description'] ?? '',
-      isDone: map['isDone'] ?? false,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'Task(uid: $uid, title: $title, description: $description, isDone: $isDone)';
-  }
+  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 }

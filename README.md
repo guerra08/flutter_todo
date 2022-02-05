@@ -16,6 +16,8 @@ A simple Flutter To-Do list application, built using Firebase as a BaaS.
 
 - **Flutter**
 - **Riverpod** for provider pattern
+- **freezed** to better generate code
+- **build_runner** to build and generate code
 - **go_router** for application navigation 
 - **Firebase** as a backend-as-a-service
 - **FlutterFire** for Firebase Flutter plugins

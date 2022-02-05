@@ -1,46 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_todo/models/auth_state.dart';
+import 'package:flutter_todo/services/auth_service.dart';
 
-class AuthController extends ChangeNotifier {
-  User? _authUser;
-  bool _isLoading = false;
+class AuthController extends StateNotifier<AuthState> {
+  final AuthService _authService;
 
-  AuthController() {
-    FirebaseAuth.instance.authStateChanges().listen(
-      (user) {
-        _authUser = user;
-        notifyListeners();
-      },
-    );
+  AuthController({required AuthService authService})
+      : _authService = authService,
+        super(const AuthState.unauthorized()) {
+    _authService.onAuthStateChanges.listen((user) {
+      if (user == null) {
+        state = const AuthState.unauthorized();
+      } else {
+        state = AuthState.authorized(user: user);
+      }
+    });
   }
 
-  User? get authUser => _authUser;
-  bool get isLoading => _isLoading;
-
-  Future<UserCredential> signInWithGoogle() async {
-    _isLoading = true;
-    notifyListeners();
-
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    final cred = await FirebaseAuth.instance.signInWithCredential(credential);
-
-    _isLoading = false;
-    notifyListeners();
-
-    return cred;
+  Future<void> signIn() async {
+    state = const AuthState.loading();
+    await _authService.signInWithGoogle();
   }
 
   Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
+    await _authService.signOut();
   }
 }
