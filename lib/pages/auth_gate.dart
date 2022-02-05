@@ -9,7 +9,7 @@ class AuthGate extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _auth = ref.watch(authServiceProvider);
+    final _auth = ref.watch(authControlleProvider);
 
     if (_auth.authUser != null) {
       return const HomePage(title: "To Do");

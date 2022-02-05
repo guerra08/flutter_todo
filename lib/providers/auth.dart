@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_todo/services/auth_service.dart';
+import 'package:flutter_todo/controllers/auth_controller.dart';
 
-final authServiceProvider = ChangeNotifierProvider<AuthService>(
+final authControlleProvider = ChangeNotifierProvider<AuthController>(
   (ref) {
-    return AuthService();
+    return AuthController();
   },
 );

@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService extends ChangeNotifier {
+class AuthController extends ChangeNotifier {
   User? _authUser;
   bool _isLoading = false;
 
-  AuthService() {
+  AuthController() {
     FirebaseAuth.instance.authStateChanges().listen(
       (user) {
         _authUser = user;
