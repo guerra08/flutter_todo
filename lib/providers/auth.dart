@@ -7,7 +7,7 @@ final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService();
 });
 
-final authNotifierProvider = StateNotifierProvider<AuthController, AuthState>(
+final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
   (ref) {
     final authService = ref.read(authServiceProvider);
     return AuthController(authService: authService);

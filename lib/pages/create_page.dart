@@ -17,8 +17,6 @@ class _CreatePageState extends ConsumerState<CreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _tasksService = ref.watch(tasksServiceProvider)!;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add a task"),
@@ -59,10 +57,11 @@ class _CreatePageState extends ConsumerState<CreatePage> {
                 onFieldSubmitted: (_) async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState?.save();
-                    await _tasksService.addNewTask(Task(
-                        title: _title!,
-                        description: _description ?? "",
-                        isDone: false));
+                    await ref.read(taskControllerProvider.notifier).addTask(
+                        Task(
+                            title: _title!,
+                            description: _description ?? "",
+                            isDone: false));
                     GoRouter.of(context).pop();
                   }
                 },

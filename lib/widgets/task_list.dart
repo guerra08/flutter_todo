@@ -14,15 +14,15 @@ class TaskList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(tasksServiceProvider)!;
-
     return ListView(
         children: tasks.map((Task task) {
       if (!task.isDone) {
         return Dismissible(
           key: Key(task.uid ?? task.hashCode.toString()),
           onDismissed: (direction) {
-            provider.markTaskAsDone(task.uid!);
+            ref
+                .read(taskControllerProvider.notifier)
+                .completeTask(taskUid: task.uid!);
           },
           background: Container(
             color: Colors.green[400],
@@ -32,7 +32,9 @@ class TaskList extends ConsumerWidget {
             description: task.description,
             isDone: false,
             onTrailingPressed: () {
-              provider.deleteTask(task.uid!);
+              ref
+                  .read(taskControllerProvider.notifier)
+                  .deleteTask(taskUid: task.uid!);
             },
           ),
         );
@@ -42,7 +44,9 @@ class TaskList extends ConsumerWidget {
         description: task.description,
         isDone: true,
         onTrailingPressed: () {
-          provider.deleteTask(task.uid!);
+          ref
+              .read(taskControllerProvider.notifier)
+              .deleteTask(taskUid: task.uid!);
         },
       );
     }).toList());

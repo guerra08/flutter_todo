@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/providers/auth.dart';
 import 'package:flutter_todo/providers/tasks.dart';
 import 'package:flutter_todo/utils/task_filter.dart';
@@ -8,35 +7,27 @@ import 'package:flutter_todo/widgets/filter_task_popup.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
-}
-
-class _HomePageState extends ConsumerState<HomePage> {
-  var _selectedFilter = TaskFilter.notDone;
-
-  @override
-  Widget build(BuildContext context) {
-    final _authService = ref.read(authNotifierProvider.notifier);
-    final _tasksService = ref.read(tasksServiceProvider)!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    var _selectedFilter = ref.watch(taskFilterProvider);
+    final _tasks = ref.watch(taskControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
         actions: [
           Row(
             children: [
               Text(_selectedFilter.label),
               FilterTaskPopup(
                 onOptionSelected: (TaskFilter option) {
-                  setState(() {
-                    _selectedFilter = option;
-                  });
+                  ref.read(taskFilterProvider.notifier).state = option;
+                  ref.read(taskControllerProvider.notifier).getTasks();
                 },
               ),
             ],
@@ -45,39 +36,24 @@ class _HomePageState extends ConsumerState<HomePage> {
         leading: IconButton(
           icon: const Icon(Icons.logout),
           onPressed: () async {
-            await _authService.signOut();
+            await ref.read(authControllerProvider.notifier).signOut();
           },
         ),
       ),
       body: Center(
-        child: StreamBuilder(
-          stream: _tasksService.getTasksAsStream(filter: _selectedFilter),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List<Task>> snapshot,
-          ) {
-            if (snapshot.hasError) {
-              return const Text('Something went wrong');
+        child: _tasks.when(
+          data: (tasks) {
+            if (tasks.isNotEmpty) {
+              return TaskList(tasks: tasks);
             }
-
-            if (!snapshot.hasData ||
-                snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-
-            if (snapshot.data!.isEmpty) {
-              return const Center(
-                child: Text(
-                  "This feels a little empty... Feel free to add a new task!",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              );
-            }
-
-            return TaskList(tasks: snapshot.data!);
+            return const Text(
+                "This seems a little empty... Feel free to add a new task!");
+          },
+          error: (_, st) {
+            return const Text("Error :(");
+          },
+          loading: () {
+            return const CircularProgressIndicator();
           },
         ),
       ),

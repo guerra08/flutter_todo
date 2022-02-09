@@ -8,7 +8,7 @@ class SignInPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _authService = ref.read(authNotifierProvider.notifier);
+    final _authService = ref.read(authControllerProvider.notifier);
 
     return Scaffold(
       body: Center(

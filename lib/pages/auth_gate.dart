@@ -10,7 +10,7 @@ class AuthGate extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _authState = ref.watch(authNotifierProvider);
+    final _authState = ref.watch(authControllerProvider);
 
     return _authState.when(
       unauthorized: () => const SignInPage(),
