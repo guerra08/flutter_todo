@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/providers/task_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CreatePage extends ConsumerStatefulWidget {
+class CreatePage extends HookConsumerWidget {
   const CreatePage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CreatePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useState(GlobalKey<FormState>());
+    final title = useState("");
+    final description = useState("");
 
-class _CreatePageState extends ConsumerState<CreatePage> {
-  final _formKey = GlobalKey<FormState>();
-  String? _title, _description;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add a task"),
       ),
       body: Form(
-        key: _formKey,
+        key: formKey.value,
         child: Column(
           children: [
             Padding(
@@ -40,7 +37,7 @@ class _CreatePageState extends ConsumerState<CreatePage> {
                 },
                 textInputAction: TextInputAction.next,
                 onSaved: (value) {
-                  _title = value;
+                  title.value = value ?? "";
                 },
               ),
             ),
@@ -52,16 +49,17 @@ class _CreatePageState extends ConsumerState<CreatePage> {
                 ),
                 textInputAction: TextInputAction.done,
                 onSaved: (value) {
-                  _description = value;
+                  description.value = value ?? "";
                 },
                 onFieldSubmitted: (_) async {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState?.save();
+                  if (formKey.value.currentState!.validate()) {
+                    formKey.value.currentState?.save();
                     await ref.read(taskControllerProvider.notifier).addTask(
-                        Task(
-                            title: _title!,
-                            description: _description ?? "",
-                            isDone: false));
+                          Task(
+                              title: title.value,
+                              description: description.value,
+                              isDone: false),
+                        );
                     GoRouter.of(context).pop();
                   }
                 },
