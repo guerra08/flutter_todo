@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_todo/models/task.dart';
-import 'package:flutter_todo/providers/tasks.dart';
+import 'package:flutter_todo/providers/task_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class CreatePage extends ConsumerStatefulWidget {

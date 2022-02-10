@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_todo/providers/auth.dart';
-import 'package:flutter_todo/providers/tasks.dart';
+import 'package:flutter_todo/providers/auth_provider.dart';
+import 'package:flutter_todo/providers/task_provider.dart';
 import 'package:flutter_todo/utils/task_filter.dart';
 import 'package:flutter_todo/widgets/filter_task_popup.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
