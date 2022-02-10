@@ -5,6 +5,7 @@ import 'package:flutter_todo/providers/task_provider.dart';
 import 'package:flutter_todo/utils/task_filter.dart';
 import 'package:flutter_todo/widgets/filter_task_popup.dart';
 import 'package:flutter_todo/widgets/task_list.dart';
+import 'package:flutter_todo/widgets/theme_switcher.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends ConsumerWidget {
@@ -30,6 +31,7 @@ class HomePage extends ConsumerWidget {
                   ref.read(taskControllerProvider.notifier).getTasks();
                 },
               ),
+              const ThemeSwitcher(),
             ],
           )
         ],

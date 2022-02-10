@@ -3,16 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_todo/pages/auth_gate.dart';
 import 'package:flutter_todo/pages/create_page.dart';
+import 'package:flutter_todo/providers/theme_provider.dart';
+import 'package:flutter_todo/utils/theme_options.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: Application()));
 }
 
-class MyApp extends StatelessWidget {
+class Application extends ConsumerWidget {
+  ThemeData _buildTheme(Brightness brightness) {
+    var baseTheme = ThemeData(
+      brightness: brightness,
+    );
+
+    return baseTheme.copyWith(
+      textTheme: GoogleFonts.latoTextTheme(
+        baseTheme.textTheme,
+      ),
+    );
+  }
+
   final _router = GoRouter(
     routes: [
       GoRoute(
@@ -28,19 +42,18 @@ class MyApp extends StatelessWidget {
     ],
   );
 
-  MyApp({Key? key}) : super(key: key);
+  Application({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeControllerProvider);
+
     return MaterialApp.router(
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       title: 'To Do',
-      theme: ThemeData(
-        textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
-      ),
-      darkTheme: ThemeData(brightness: Brightness.dark),
-      themeMode: ThemeMode.system,
+      theme: _buildTheme(
+          theme == ThemeOptions.darkMode ? Brightness.dark : Brightness.light),
     );
   }
 }
